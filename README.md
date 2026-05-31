@@ -1,11 +1,11 @@
-# 🎙️ Speakit — AI 영어 회화 튜터
+#  Speakit — AI 영어 회화 튜터
 
 Anthropic Claude API를 활용한 브라우저 기반 영어 회화 튜터예요.  
 레벨에 맞춰 대화하고, 문법 실수를 실시간으로 교정해 드려요.
 
 ---
 
-## 🚀 시작하기 (순서대로 따라해 주세요!)
+##  시작하기 (순서대로 따라해 주세요!)
 
 ### 1단계 — 다운로드 & 이동
 
@@ -14,7 +14,7 @@ Anthropic Claude API를 활용한 브라우저 기반 영어 회화 튜터예요
 cd speakit-v3
 ```
 
-### 2단계 — 패키지 설치 ⚠️ 반드시 먼저 실행!
+### 2단계 — 패키지 설치 반드시 먼저 실행!
 
 ```bash
 npm install
@@ -39,13 +39,13 @@ OPENAI_API_KEY=sk-proj-여기에본인키입력
 PORT=3000
 ```
 
-> ⚠️ `.env` 파일은 절대 GitHub에 올리지 마세요. (`.gitignore`에 이미 등록되어 있어요)
+ `.env` 파일은 절대 GitHub에 올리지 마세요. (`.gitignore`에 이미 등록되어 있어요)
 
 ### 4단계 — 실행!
 
 ```bash
 npm start
-# ✅  Speakit 실행 중 → http://localhost:3000
+#   Speakit 실행 중 → http://localhost:3000
 ```
 
 브라우저에서 `http://localhost:3000` 접속하면 됩니다.
@@ -58,7 +58,7 @@ npm run dev
 
 ---
 
-## 🗂️ 파일 구조
+##  파일 구조
 
 ```
 speakit-v3/
@@ -88,7 +88,7 @@ speakit-v3/
 
 ---
 
-## 🔒 API 키 보안 구조
+##  API 키 보안 구조
 
 ```
 브라우저  →  POST /api/chat  →  server.js  →  Anthropic API
@@ -99,7 +99,7 @@ speakit-v3/
 
 ---
 
-## 🛠️ 기술 스택
+##  기술 스택
 
 | 레이어 | 기술 |
 |---|---|
@@ -110,7 +110,7 @@ speakit-v3/
 
 ---
 
-## ✨ 주요 기능
+##  주요 기능
 
 | 기능 | 설명 |
 |---|---|
