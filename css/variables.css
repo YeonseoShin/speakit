@@ -1,0 +1,83 @@
+/* ════════════════════════════════════════
+   variables.css — 디자인 토큰
+   라이트 모드 기본 / 다크 모드 오버라이드
+   ════════════════════════════════════════ */
+
+:root {
+  /* ── 브랜드 컬러 ── */
+  --accent:        #4F7EFF;   /* 메인 포인트: 블루 */
+  --accent-light:  #EBF0FF;   /* 버튼 배경, 호버 */
+  --accent-dark:   #3560D8;   /* 버튼 프레스 */
+  --accent-text:   #2347B5;   /* 라이트모드에서 accent 위 텍스트 */
+
+  --correct:       #12B76A;
+  --correct-light: #ECFDF5;
+  --error:         #F04438;
+  --error-light:   #FEF3F2;
+  --warn:          #F79009;
+  --warn-light:    #FFFAEB;
+
+  /* ── 배경 ── */
+  --bg:        #FFFFFF;
+  --bg-sub:    #F8F9FC;
+  --bg-card:   #FFFFFF;
+
+  /* ── 경계선 ── */
+  --border:    #E4E7EE;
+  --border-md: #C9CDD8;
+
+  /* ── 텍스트 ── */
+  --text:      #111827;
+  --text2:     #4B5563;
+  --text3:     #9CA3AF;
+
+  /* ── 표면 (사이드바, 헤더 등) ── */
+  --surface:   #F8F9FC;
+
+  /* ── 폰트 ── */
+  --font-body:    'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+
+  /* ── 그림자 ── */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+
+  /* ── 반지름 ── */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-pill: 999px;
+
+  /* ── 트랜지션 ── */
+  --transition: .18s ease;
+}
+
+/* ── 다크 모드 ── */
+[data-theme="dark"] {
+  --accent:        #7AA0FF;
+  --accent-light:  #1E2A4A;
+  --accent-dark:   #9BBCFF;
+  --accent-text:   #C0D4FF;
+
+  --correct:       #32D583;
+  --correct-light: #054F31;
+  --error:         #F97066;
+  --error-light:   #55160C;
+  --warn:          #FDB022;
+  --warn-light:    #4E1D09;
+
+  --bg:        #0F1117;
+  --bg-sub:    #171B26;
+  --bg-card:   #1C2130;
+
+  --border:    #2A3044;
+  --border-md: #3D4760;
+
+  --text:      #F0F4FF;
+  --text2:     #A0ABBE;
+  --text3:     #5A6580;
+
+  --surface:   #171B26;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.4);
+}

@@ -1,0 +1,15 @@
+{
+  "name": "speakit",
+  "version": "1.0.0",
+  "description": "AI-powered English conversation tutor",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "setup": "npm install && echo '✅ 설치 완료! npm start 로 실행하세요.'"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

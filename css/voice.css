@@ -1,0 +1,155 @@
+/* ══════════════════════════════════
+   voice.css — 음성 기능 전용 스타일
+   ══════════════════════════════════ */
+
+/* ── 마이크 버튼 ── */
+.mic-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-sub);
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: all var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.mic-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* 녹음 중 상태 */
+.mic-btn[data-state="recording"] {
+  background: var(--error);
+  border-color: var(--error);
+  color: #fff;
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 68, 56, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(240, 68, 56, 0); }
+}
+
+/* 아이콘 전환 */
+.mic-btn[data-state="idle"]      .mic-icon-rec  { display: none; }
+.mic-btn[data-state="recording"] .mic-icon-idle { display: none; }
+.mic-btn[data-state="recording"] .mic-icon-rec  { display: block; }
+
+/* ── 음성 재생 배너 ── */
+.speaking-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--accent-light);
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.speaking-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-text);
+  flex: 1;
+}
+
+/* 음파 애니메이션 */
+.speaking-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+
+.speaking-wave span {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  animation: wave 0.8s ease-in-out infinite;
+}
+
+.speaking-wave span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+.speaking-wave span:nth-child(2) { height: 14px; animation-delay: .1s; }
+.speaking-wave span:nth-child(3) { height: 20px; animation-delay: .2s; }
+.speaking-wave span:nth-child(4) { height: 14px; animation-delay: .3s; }
+.speaking-wave span:nth-child(5) { height: 6px;  animation-delay: .4s; }
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.5); opacity: .6; }
+  50%       { transform: scaleY(1);   opacity: 1; }
+}
+
+/* 중지 버튼 */
+.stop-speak-btn {
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  color: var(--accent-text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.stop-speak-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── 자동 음성 재생 토글 버튼 ── */
+.auto-speak-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.auto-speak-btn[data-active="true"] {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.auto-speak-btn[data-active="false"] {
+  opacity: .45;
+}
+
+.auto-speak-btn[data-active="false"]::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 26px;
+  background: var(--text3);
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+/* ── 웰컴 카드 음성 힌트 ── */
+.welcome-voice-hint {
+  font-size: 12px;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  margin-top: 10px;
+  display: inline-block;
+}

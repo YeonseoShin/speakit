@@ -1,0 +1,306 @@
+/* ══════════════════════════════════
+   review.css — 복습 탭 전용 스타일
+   ══════════════════════════════════ */
+
+/* ── 복습 패널 전체 ── */
+.review-panel {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+  background: var(--bg);
+  flex-direction: column;
+  gap: 32px;
+}
+.review-panel.active { display: flex; }
+
+.review-panel::-webkit-scrollbar { width: 4px; }
+.review-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── 섹션 헤더 ── */
+.rv-section { display: flex; flex-direction: column; gap: 16px; }
+
+.rv-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+/* ── 빈 상태 ── */
+.rv-empty {
+  text-align: center;
+  color: var(--text3);
+  font-size: 14px;
+  padding: 28px 0;
+  line-height: 1.8;
+}
+
+/* ══════════════════
+   1. 세션 요약 카드
+   ══════════════════ */
+.rv-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.rv-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+.rv-stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-bottom: 6px;
+}
+.rv-stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.rv-stat-val.blue   { color: var(--accent); }
+.rv-stat-val.green  { color: var(--correct); }
+.rv-stat-val.orange { color: var(--warn); }
+.rv-stat-val.red    { color: var(--error); }
+
+/* 유창성 게이지 */
+.rv-gauge-wrap {
+  margin-top: 8px;
+  height: 5px;
+  background: var(--bg-sub);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.rv-gauge-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+.gauge-good { background: var(--correct); }
+.gauge-mid  { background: var(--warn); }
+.gauge-low  { background: var(--error); }
+
+/* 유형별 분포 */
+.rv-type-list { display: flex; flex-direction: column; gap: 8px; }
+
+.rv-type-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 36px;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.rv-type-label { color: var(--text2); font-weight: 500; }
+.rv-type-bar-wrap {
+  height: 6px;
+  background: var(--bg-sub);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.rv-type-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width .8s ease;
+}
+.rv-type-count { font-size: 12px; color: var(--text3); text-align: right; }
+
+/* ══════════════════
+   2. 교정 목록
+   ══════════════════ */
+.rv-corrections-list { display: flex; flex-direction: column; gap: 10px; }
+
+.rv-corr-item {
+  display: flex;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+.rv-corr-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  min-width: 20px;
+  padding-top: 2px;
+}
+.rv-corr-body { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+
+.rv-corr-type-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--accent-light);
+  color: var(--accent-text);
+  margin-bottom: 2px;
+  width: fit-content;
+}
+.rv-corr-orig  { font-size: 13px; color: var(--text3); text-decoration: line-through; }
+.rv-corr-fixed { font-size: 14px; color: var(--correct); font-weight: 600; }
+.rv-corr-note  { font-size: 12px; color: var(--text2); font-style: italic; margin-top: 2px; }
+
+/* ══════════════════
+   3. 플래시카드
+   ══════════════════ */
+.rv-flashcard-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 3D 카드 컨테이너 */
+.rv-flashcard {
+  width: 100%;
+  max-width: 460px;
+  height: 200px;
+  cursor: pointer;
+  perspective: 1000px;
+  user-select: none;
+}
+
+.rv-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+}
+
+.rv-flashcard.flipped .rv-card-inner {
+  transform: rotateY(180deg);
+}
+
+.rv-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+/* 앞면 */
+.rv-card-front {
+  background: var(--bg-card);
+}
+.fc-front-word {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.fc-front-hint {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* 뒷면 */
+.rv-card-back {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: rotateY(180deg);
+}
+.fc-back-word {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 10px;
+}
+.fc-back-meaning {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* 카드 컨트롤 */
+.rv-card-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rv-card-counter {
+  font-size: 13px;
+  color: var(--text3);
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+}
+
+.fc-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text2);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.fc-nav-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+.fc-nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+.fc-shuffle-btn {
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-sub);
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.fc-shuffle-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* ── 플래시카드 한국어 뜻 ── */
+.fc-back-meaning-ko {
+  font-size: 13px;
+  color: rgba(255,255,255,.75);
+  margin-top: 8px;
+  text-align: center;
+  padding: 4px 12px;
+  background: rgba(255,255,255,.15);
+  border-radius: var(--radius-pill);
+}

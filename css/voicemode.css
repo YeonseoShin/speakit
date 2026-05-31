@@ -1,0 +1,549 @@
+/* ═══════════════════════════════════════
+   voicemode.css — 음성 대화 모드 전용 UI
+   ═══════════════════════════════════════ */
+
+/* ── 음성 패널 기본 (숨김) ── */
+.voice-mode-panel {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg);
+  overflow: hidden;
+  position: relative;
+}
+
+/* data-chat-mode="voice" 일 때 활성화 */
+[data-chat-mode="voice"] .voice-mode-panel { display: flex; }
+[data-chat-mode="voice"] .chat-panel       { display: none; }
+[data-chat-mode="voice"] #modeVoiceBtn     { background: var(--accent); color: #fff; border-color: var(--accent); }
+[data-chat-mode="voice"] #modeChatBtn      { background: transparent; color: var(--text2); border-color: var(--border); }
+[data-chat-mode="chat"]  #modeChatBtn      { background: var(--accent); color: #fff; border-color: var(--accent); }
+[data-chat-mode="chat"]  #modeVoiceBtn     { background: transparent; color: var(--text2); border-color: var(--border); }
+
+/* ── 모드 스위치 버튼 ── */
+.mode-switch {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.mode-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.mode-btn:first-child { border-right: 1px solid var(--border); }
+
+/* ── 음성 모드 주제 바 ── */
+.vm-topic-bar {
+  width: 100%;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: var(--bg);
+}
+
+/* ── 중앙 콘텐츠 영역 ── */
+.vm-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 32px 24px;
+  width: 100%;
+}
+
+/* ── AI 아바타 ── */
+.vm-avatar-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vm-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vm-avatar-face {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  border: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  position: relative;
+  z-index: 2;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+/* 말하는 중 아바타 */
+.vm-avatar[data-speaking="true"] .vm-avatar-face {
+  background: var(--accent);
+  border-color: var(--accent-dark);
+}
+
+/* 링 애니메이션 */
+.vm-avatar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.vm-ring-1 { width: 110px; height: 110px; }
+.vm-ring-2 { width: 130px; height: 130px; }
+.vm-ring-3 { width: 150px; height: 150px; }
+
+.vm-avatar[data-speaking="true"] .vm-ring-1 { animation: ring-pulse 1.4s ease-out infinite; }
+.vm-avatar[data-speaking="true"] .vm-ring-2 { animation: ring-pulse 1.4s ease-out .3s infinite; }
+.vm-avatar[data-speaking="true"] .vm-ring-3 { animation: ring-pulse 1.4s ease-out .6s infinite; }
+
+@keyframes ring-pulse {
+  0%   { opacity: .6; transform: scale(.9); }
+  100% { opacity: 0;  transform: scale(1.15); }
+}
+
+/* ── AI 자막 ── */
+.vm-subtitle-ai {
+  max-width: 560px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 54px;
+  transition: opacity .3s;
+  padding: 0 16px;
+}
+.vm-subtitle-ai[data-visible="false"] { opacity: .3; font-size: 14px; color: var(--text3); }
+
+/* ── 상태 텍스트 ── */
+.vm-status {
+  font-size: 13px;
+  font-weight: 500;
+  min-height: 20px;
+  transition: color .3s;
+}
+.vm-status[data-type="hint"]     { color: var(--text3); }
+.vm-status[data-type="listening"]{ color: var(--accent); }
+.vm-status[data-type="thinking"] { color: var(--warn); }
+.vm-status[data-type="speaking"] { color: var(--correct); }
+.vm-status[data-type="error"]    { color: var(--error); }
+
+/* ── 인식 중 텍스트 ── */
+.vm-transcript-wrap {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vm-transcript {
+  font-size: 15px;
+  color: var(--accent);
+  font-style: italic;
+  text-align: center;
+  max-width: 480px;
+}
+
+/* ── 사용자 자막 ── */
+.vm-subtitle-user {
+  font-size: 14px;
+  color: var(--text2);
+  text-align: center;
+  max-width: 480px;
+  padding: 6px 16px;
+  background: var(--bg-sub);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  min-height: 32px;
+  transition: opacity .3s;
+}
+.vm-subtitle-user[data-visible="false"] { opacity: 0; }
+.vm-subtitle-user::before { content: '나: '; color: var(--text3); font-size: 12px; }
+
+/* ── 하단 컨트롤 ── */
+.vm-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 20px 24px 32px;
+  flex-shrink: 0;
+}
+
+/* 보조 버튼 */
+.vm-ctrl-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 64px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.vm-ctrl-btn:hover { opacity: .7; transform: translateY(-2px); }
+.vm-btn-icon  { font-size: 26px; }
+.vm-btn-label { font-size: 11px; font-weight: 600; color: var(--text3); }
+
+/* ── 메인 마이크 버튼 ── */
+.vm-mic-btn {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  transition: all var(--transition);
+  box-shadow: 0 4px 24px rgba(79,126,255,.35);
+}
+.vm-mic-btn:hover { transform: scale(1.06); box-shadow: 0 6px 32px rgba(79,126,255,.45); }
+.vm-mic-btn:active { transform: scale(.97); }
+
+/* 녹음 중 */
+.vm-mic-btn[data-state="recording"] {
+  background: var(--error);
+  box-shadow: 0 4px 24px rgba(240,68,56,.4);
+  animation: mic-glow 1.2s ease-in-out infinite;
+}
+@keyframes mic-glow {
+  0%, 100% { box-shadow: 0 4px 24px rgba(240,68,56,.4); }
+  50%       { box-shadow: 0 4px 40px rgba(240,68,56,.7); }
+}
+
+/* 마이크 링 (녹음 중 방사) */
+.vm-mic-rings { position: absolute; inset: 0; border-radius: 50%; }
+.vm-mic-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--error);
+  opacity: 0;
+}
+.vm-mic-btn[data-state="recording"] .vm-mic-ring:nth-child(1) { animation: mic-ring 1.4s ease-out infinite; }
+.vm-mic-btn[data-state="recording"] .vm-mic-ring:nth-child(2) { animation: mic-ring 1.4s ease-out .5s infinite; }
+@keyframes mic-ring {
+  0%   { transform: scale(1);   opacity: .7; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* 아이콘 전환 */
+.vm-mic-btn .vm-mic-icon-idle,
+.vm-mic-btn .vm-mic-icon-rec { pointer-events: none; }
+.vm-mic-btn[data-state="idle"]      .vm-mic-icon-rec  { display: none; }
+.vm-mic-btn[data-state="recording"] .vm-mic-icon-idle { display: none; }
+
+/* ── 음성 모드 웰컴 ── */
+.vm-welcome {
+  position: absolute;
+  bottom: 160px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text2);
+  pointer-events: none;
+}
+.vm-welcome .start-btn { pointer-events: all; margin-top: 12px; }
+
+/* ── 채팅 모드: 말풍선 재생 버튼 ── */
+.msg-replay-btn {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  padding: 2px 6px;
+  margin-left: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all var(--transition);
+  vertical-align: middle;
+}
+.msg-replay-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* ══════════════════════════════════════════
+   음성 모드 웰컴 — 3D 풀스크린 온보딩
+   ══════════════════════════════════════════ */
+
+/* 웰컴 컨테이너: 음성 패널 안에서 absolute 풀스크린 */
+.vm-welcome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #07101f;
+}
+
+/* Three.js 캔버스: 컨테이너 안 absolute, 가장 아래 */
+#welcomeCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+  pointer-events: none !important;
+  display: block;
+}
+
+/* 비네팅 오버레이 */
+.vm-welcome::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 140% 100% at 50% 50%,
+    transparent 25%, rgba(4, 8, 20, 0.55) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── 카드 공통: 캔버스·오버레이 위에 확실히 ── */
+.vm-welcome-card {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto !important;  /* 클릭 반드시 작동 */
+  background: rgba(10, 16, 36, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(100, 150, 255, 0.25);
+  border-radius: 28px;
+  padding: 40px 36px 32px;
+  text-align: center;
+  width: 460px;
+  max-width: calc(100vw - 48px);
+  box-shadow: 0 0 0 1px rgba(100,150,255,0.07),
+              0 28px 72px rgba(0,0,0,0.6),
+              0 0 100px rgba(60,100,255,0.1);
+  animation: cardAppear 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* 카드 안 모든 버튼도 pointer-events 명시 */
+.vm-welcome-card button {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+/* ── 로고 링 ── */
+.wc-logo-wrap {
+  position: relative;
+  width: 76px; height: 76px;
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.wc-logo-ring {
+  position: absolute;
+  inset: 0; border-radius: 50%;
+  border: 1.5px solid rgba(100, 160, 255, 0.4);
+  animation: ringPulse 2.4s ease-in-out infinite;
+}
+.wc-ring2 {
+  inset: -14px;
+  border-color: rgba(100, 160, 255, 0.2);
+  animation-delay: 0.8s;
+}
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.07); opacity: 0.55; }
+}
+.wc-logo-icon {
+  font-size: 36px;
+  filter: drop-shadow(0 0 14px rgba(100, 160, 255, 0.65));
+  position: relative; z-index: 1;
+}
+
+/* ── 태그 ── */
+.wc-tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(130, 170, 255, 0.85);
+  background: rgba(80, 130, 255, 0.13);
+  border: 1px solid rgba(80, 130, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 14px;
+  margin-bottom: 16px;
+}
+
+/* ── 타이틀 ── */
+.wc-title {
+  font-size: 32px; font-weight: 800;
+  color: #ECF1FF;
+  line-height: 1.25;
+  letter-spacing: -0.8px;
+  margin-bottom: 12px;
+}
+.wc-title-accent {
+  background: linear-gradient(90deg, #7AB4FF, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── 설명 ── */
+.wc-desc {
+  font-size: 13.5px;
+  color: rgba(170, 190, 230, 0.78);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+
+/* ── 기능 태그 ── */
+.wc-features {
+  display: flex; gap: 7px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.wc-feat {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 500;
+  color: rgba(160, 190, 255, 0.9);
+  background: rgba(60, 100, 255, 0.1);
+  border: 1px solid rgba(80, 130, 255, 0.2);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.wc-feat-icon { font-size: 13px; }
+
+/* ── 시작 버튼 ── */
+.wc-start-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 32px;
+  background: linear-gradient(135deg, #5B8FFF, #7B5EF8);
+  color: #fff; font-size: 15px; font-weight: 700;
+  border: none; border-radius: 999px;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  box-shadow: 0 4px 22px rgba(80,130,255,0.45);
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  margin-bottom: 12px;
+  -webkit-user-select: none; user-select: none;
+}
+.wc-start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(80,130,255,0.6);
+}
+.wc-start-btn:active { transform: translateY(0); }
+.wc-final-btn {
+  background: linear-gradient(135deg, #3D6AE8, #5B45D8);
+  width: 100%; justify-content: center; font-size: 15px;
+}
+
+/* ── 서브 텍스트 ── */
+.wc-sub { font-size: 11px; color: rgba(120, 150, 200, 0.5); }
+
+/* ── Step 카드 ── */
+.wc-topic-card { padding: 28px 28px 24px; }
+
+.wc-back-btn {
+  position: absolute; top: 18px; left: 18px;
+  font-size: 12px; color: rgba(130, 160, 220, 0.7);
+  background: transparent; border: none;
+  cursor: pointer; font-family: var(--font-body);
+  transition: color 0.2s; pointer-events: auto !important;
+}
+.wc-back-btn:hover { color: #7AB4FF; }
+
+.wc-step-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(130, 170, 255, 0.6);
+  margin-bottom: 8px;
+}
+.wc-step-title { font-size: 20px; font-weight: 700; color: #ECF1FF; margin-bottom: 5px; }
+.wc-step-desc  { font-size: 13px; color: rgba(160,185,230,0.7); margin-bottom: 18px; }
+
+/* ── 주제 그리드 ── */
+.wc-topic-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-bottom: 12px;
+}
+.wc-topic-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 12px 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(100,140,255,0.2);
+  border-radius: 12px;
+  cursor: pointer !important; pointer-events: auto !important;
+  transition: all 0.18s; font-family: var(--font-body);
+}
+.wc-topic-btn:hover  { background: rgba(80,130,255,0.14); border-color: rgba(100,160,255,0.45); }
+.wc-topic-btn.active { background: rgba(80,130,255,0.2);  border-color: #6B9FFF; }
+.wc-topic-emoji { font-size: 20px; }
+.wc-topic-name  { font-size: 11px; font-weight: 600; color: rgba(200,220,255,0.9); }
+
+/* ── 커스텀 입력 ── */
+.wc-custom-wrap { margin-bottom: 16px; }
+.wc-custom-input {
+  width: 100%; padding: 9px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(100,140,255,0.22);
+  border-radius: 10px;
+  color: #E0EAFF; font-size: 13px;
+  font-family: var(--font-body);
+  outline: none; transition: border-color 0.2s;
+  pointer-events: auto !important;
+}
+.wc-custom-input::placeholder { color: rgba(140,170,220,0.45); }
+.wc-custom-input:focus { border-color: rgba(100,160,255,0.55); }
+
+/* ── 레벨 그리드 ── */
+.wc-level-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.wc-level-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(100,140,255,0.2);
+  border-radius: 12px;
+  cursor: pointer !important; pointer-events: auto !important;
+  transition: all 0.18s; font-family: var(--font-body);
+}
+.wc-level-btn:hover  { background: rgba(80,130,255,0.14); border-color: rgba(100,160,255,0.45); }
+.wc-level-btn.active { background: rgba(80,130,255,0.2);  border-color: #6B9FFF; }
+.wc-level-emoji { font-size: 20px; flex-shrink: 0; }
+.wc-level-name  { display: block; font-size: 13px; font-weight: 700; color: #E0EAFF; }
+.wc-level-desc  { display: block; font-size: 11px; color: rgba(160,185,230,0.65); margin-top: 2px; }
+
+/* ── 웰컴 페이드아웃 ── */
+@keyframes welcomeFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.04); }
+}
+.vm-welcome.fading {
+  animation: welcomeFadeOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}

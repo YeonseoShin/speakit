@@ -1,0 +1,13 @@
+/* Sidebar-specific overrides.
+   Core sidebar styles live in layout.css and components.css.
+   Add review-tab panel styles here as the project grows. */
+
+/* ── Review panel (hidden by default) ── */
+.review-panel {
+  display: none;
+  padding: 16px;
+}
+
+.review-panel.active {
+  display: block;
+}

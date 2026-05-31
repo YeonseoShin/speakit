@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light" data-chat-mode="voice">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>스피킷 — AI 영어 회화 튜터</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+  <link rel="stylesheet" href="css/voice.css" />
+  <link rel="stylesheet" href="css/voicemode.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/review.css" />
+</head>
+<body>
+
+  <!-- ══════════ 헤더 ══════════ -->
+  <header class="header">
+    <div class="logo">
+      <img src="assets/logo.svg"      class="logo-light" alt="Speakit" height="32" />
+      <img src="assets/logo-dark.svg" class="logo-dark"  alt="Speakit" height="32" />
+    </div>
+
+    <nav class="tab-nav" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('chat')">💬 대화</button>
+      <button class="tab-btn"        onclick="switchTab('review')">📚 복습</button>
+    </nav>
+
+    <div class="header-right">
+      <!-- 채팅 / 음성 모드 전환 -->
+      <div class="mode-switch" id="modeSwitch">
+        <button class="mode-btn" id="modeVoiceBtn" onclick="setMode('voice')">🎙️ 음성</button>
+        <button class="mode-btn" id="modeChatBtn"  onclick="setMode('chat')">🗨️ 채팅</button>
+      </div>
+      <!-- 새 대화 버튼 -->
+      <button class="new-chat-btn" onclick="newConversation()" title="새 대화 시작" aria-label="새 대화 시작">🔄 새 대화</button>
+      <button class="auto-speak-btn" id="autoSpeakBtn" data-active="true"
+              onclick="toggleAutoSpeak()" title="자동 음성 재생" aria-label="자동 음성 재생 토글">🔊</button>
+      <div class="level-badge beginner" id="levelBadge" onclick="cycleLevel()" title="레벨 변경">🟢 초급</div>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="테마 전환">🌙</button>
+    </div>
+  </header>
+
+  <!-- ══════════ 메인 ══════════ -->
+  <main class="main">
+
+    <!-- ════ 채팅 패널 ════ -->
+    <section class="chat-panel" id="chatPanel" aria-label="채팅 대화">
+
+      <!-- 주제 바 -->
+      <div class="topic-bar">
+        <span class="topic-label">주제</span>
+        <div class="topic-chips">
+          <button class="chip active" onclick="setTopic(this,'Daily Life')">일상생활</button>
+          <button class="chip"        onclick="setTopic(this,'Movies & TV')">영화·드라마</button>
+          <button class="chip"        onclick="setTopic(this,'Travel')">여행</button>
+          <button class="chip"        onclick="setTopic(this,'Food')">음식</button>
+          <button class="chip"        onclick="setTopic(this,'Technology')">기술·IT</button>
+          <button class="chip"        onclick="setTopic(this,'Hobbies')">취미</button>
+          <!-- 커스텀 주제 -->
+          <button class="chip chip-custom-trigger" id="customTopicLabel" onclick="toggleCustomTopic()">✏️ 직접 입력</button>
+        </div>
+        <!-- 커스텀 주제 입력창 -->
+        <div class="custom-topic-input" id="customTopicInput">
+          <input type="text" id="customTopicText" placeholder="주제를 입력하세요 (예: K-pop, 스포츠...)"
+                 maxlength="40" onkeydown="handleCustomTopicKey(event)" />
+          <button onclick="confirmCustomTopic()">확인</button>
+        </div>
+      </div>
+
+      <!-- 메시지 목록 -->
+      <div class="messages" id="messages" role="log" aria-live="polite">
+        <div class="welcome-card" id="welcomeCard">
+          <span class="welcome-icon">🎙️</span>
+          <h2>스피킷에 오신 걸 환영해요!</h2>
+          <p>AI 영어 회화 파트너예요. 자연스러운 대화를 나누면서<br>문법 실수는 부드럽게 교정해 드릴게요.</p>
+          <p class="welcome-voice-hint">🗨️ 채팅 모드 또는 🎙️ 음성 모드로 시작할 수 있어요!</p>
+          <button class="start-btn" onclick="startConversation()">대화 시작하기 →</button>
+        </div>
+      </div>
+
+      <!-- 재생 중 배너 -->
+      <div class="speaking-banner" id="speakingBanner" style="display:none">
+        <div class="speaking-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="speaking-label">AI 음성 재생 중...</span>
+        <button class="stop-speak-btn" onclick="stopSpeaking()">■ 중지</button>
+      </div>
+
+      <!-- 입력 영역 -->
+      <div class="input-area">
+        <div class="hint-row" id="hintRow"></div>
+        <div class="input-wrap">
+          <button class="mic-btn" id="micBtn" data-state="idle" onclick="toggleRecording()" title="말하기">
+            <span class="mic-icon-idle">🎤</span>
+            <span class="mic-icon-rec">⏹</span>
+          </button>
+          <textarea class="msg-input" id="msgInput"
+            placeholder="영어로 입력하거나 🎤 버튼으로 말해보세요..."
+            rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>➤</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ 음성 모드 패널 ════ -->
+    <section class="voice-mode-panel" id="voicePanel" aria-label="음성 대화">
+
+      <div class="vm-topic-bar">
+        <span class="topic-label">주제</span>
+        <div class="topic-chips">
+          <button class="chip active" onclick="setTopic(this,'Daily Life')">일상생활</button>
+          <button class="chip"        onclick="setTopic(this,'Movies & TV')">영화·드라마</button>
+          <button class="chip"        onclick="setTopic(this,'Travel')">여행</button>
+          <button class="chip"        onclick="setTopic(this,'Food')">음식</button>
+          <button class="chip"        onclick="setTopic(this,'Technology')">기술·IT</button>
+          <button class="chip"        onclick="setTopic(this,'Hobbies')">취미</button>
+          <button class="chip chip-custom-trigger" onclick="toggleCustomTopic()">✏️ 직접 입력</button>
+        </div>
+        <div class="custom-topic-input" id="customTopicInput2">
+          <input type="text" placeholder="주제를 입력하세요..." maxlength="40"
+                 onkeydown="if(event.key==='Enter'){STATE.topic=this.value.trim()||STATE.topic;this.closest('.custom-topic-input').classList.remove('open');}" />
+          <button onclick="let v=this.previousElementSibling.value.trim();if(v){STATE.topic=v;this.closest('.custom-topic-input').classList.remove('open');}">확인</button>
+        </div>
+      </div>
+
+      <div class="vm-center">
+        <div class="vm-avatar-wrap">
+          <div class="vm-avatar" id="voiceAiAvatar" data-speaking="false">
+            <div class="vm-avatar-ring vm-ring-1"></div>
+            <div class="vm-avatar-ring vm-ring-2"></div>
+            <div class="vm-avatar-ring vm-ring-3"></div>
+            <div class="vm-avatar-face">🤖</div>
+          </div>
+        </div>
+        <div class="vm-subtitle-ai" id="voiceAiSub" data-visible="false">대화를 시작해 보세요!</div>
+        <div class="vm-status" id="voiceStatus" data-type="hint">마이크 버튼을 눌러 말해보세요</div>
+        <div class="vm-transcript-wrap">
+          <div class="vm-transcript" id="voiceTranscript"></div>
+        </div>
+        <div class="vm-subtitle-user" id="voiceUserSub" data-visible="false"></div>
+      </div>
+
+      <div class="vm-controls">
+        <button class="vm-ctrl-btn" onclick="replayLast()" title="AI 마지막 말 다시 듣기">
+          <span class="vm-btn-icon">🔁</span><span class="vm-btn-label">다시 듣기</span>
+        </button>
+        <button class="vm-mic-btn" id="voiceMicBtn" data-state="idle" onclick="toggleRecording()">
+          <div class="vm-mic-rings"><div class="vm-mic-ring"></div><div class="vm-mic-ring"></div></div>
+          <span class="vm-mic-icon-idle">🎤</span>
+          <span class="vm-mic-icon-rec">⏹</span>
+        </button>
+        <button class="vm-ctrl-btn" onclick="stopSpeaking()" title="AI 음성 중지">
+          <span class="vm-btn-icon">⏸</span><span class="vm-btn-label">음성 중지</span>
+        </button>
+      </div>
+
+      <div class="vm-welcome" id="voiceWelcome">
+        <canvas id="welcomeCanvas"></canvas>
+
+        <!-- Step 1: 메인 랜딩 -->
+        <div class="vm-welcome-card" id="welcomeStep1">
+          <div class="wc-logo-wrap">
+            <div class="wc-logo-ring"></div>
+            <div class="wc-logo-ring wc-ring2"></div>
+            <div class="wc-logo-icon">🎙️</div>
+          </div>
+          <div class="wc-tag">AI 영어 회화 파트너</div>
+          <h1 class="wc-title">영어, 이제<br><span class="wc-title-accent">말하면서</span> 배워요</h1>
+          <p class="wc-desc">실시간 발음·문법 교정, 원어민 음성, 맞춤형 대화까지<br>스피킷이 옆에서 함께해요.</p>
+          <div class="wc-features">
+            <div class="wc-feat"><span class="wc-feat-icon">🎤</span><span>음성 인식</span></div>
+            <div class="wc-feat"><span class="wc-feat-icon">✏️</span><span>실시간 교정</span></div>
+            <div class="wc-feat"><span class="wc-feat-icon">🔊</span><span>원어민 음성</span></div>
+            <div class="wc-feat"><span class="wc-feat-icon">📊</span><span>학습 분석</span></div>
+          </div>
+          <button class="wc-start-btn" onclick="showTopicStep()">
+            시작하기
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <p class="wc-sub">Chrome / Edge 브라우저 권장</p>
+        </div>
+
+        <!-- Step 2: 주제 선택 -->
+        <div class="vm-welcome-card wc-topic-card" id="welcomeStep2" style="display:none">
+          <button class="wc-back-btn" onclick="showLandingStep()">← 돌아가기</button>
+          <div class="wc-step-label">STEP 1 / 2</div>
+          <h2 class="wc-step-title">어떤 주제로 이야기할까요?</h2>
+          <p class="wc-step-desc">관심 있는 주제를 선택하거나 직접 입력해 보세요.</p>
+
+          <div class="wc-topic-grid" id="wcTopicGrid">
+            <button class="wc-topic-btn active" data-topic="Daily Life" onclick="selectWcTopic(this,'Daily Life')">
+              <span class="wc-topic-emoji">☀️</span><span class="wc-topic-name">일상생활</span>
+            </button>
+            <button class="wc-topic-btn" data-topic="Movies &amp; TV" onclick="selectWcTopic(this,'Movies & TV')">
+              <span class="wc-topic-emoji">🎬</span><span class="wc-topic-name">영화·드라마</span>
+            </button>
+            <button class="wc-topic-btn" data-topic="Travel" onclick="selectWcTopic(this,'Travel')">
+              <span class="wc-topic-emoji">✈️</span><span class="wc-topic-name">여행</span>
+            </button>
+            <button class="wc-topic-btn" data-topic="Food" onclick="selectWcTopic(this,'Food')">
+              <span class="wc-topic-emoji">🍜</span><span class="wc-topic-name">음식</span>
+            </button>
+            <button class="wc-topic-btn" data-topic="Technology" onclick="selectWcTopic(this,'Technology')">
+              <span class="wc-topic-emoji">💻</span><span class="wc-topic-name">기술·IT</span>
+            </button>
+            <button class="wc-topic-btn" data-topic="Hobbies" onclick="selectWcTopic(this,'Hobbies')">
+              <span class="wc-topic-emoji">🎸</span><span class="wc-topic-name">취미</span>
+            </button>
+          </div>
+
+          <div class="wc-custom-wrap">
+            <input type="text" id="wcCustomTopic" class="wc-custom-input"
+                   placeholder="✏️ 직접 입력 (예: K-pop, 비즈니스 영어...)"
+                   maxlength="40"
+                   oninput="if(this.value.trim()){selectWcTopicCustom(this.value.trim());}"
+                   onkeydown="if(event.key==='Enter'&&this.value.trim())showLevelStep()"/>
+          </div>
+
+          <button class="wc-start-btn" onclick="showLevelStep()">
+            다음 →
+          </button>
+        </div>
+
+        <!-- Step 3: 레벨 선택 -->
+        <div class="vm-welcome-card wc-topic-card" id="welcomeStep3" style="display:none">
+          <button class="wc-back-btn" onclick="showTopicStep()">← 돌아가기</button>
+          <div class="wc-step-label">STEP 2 / 2</div>
+          <h2 class="wc-step-title">내 영어 레벨은?</h2>
+          <p class="wc-step-desc">AI가 레벨에 맞게 대화 난이도를 조절해요.</p>
+
+          <div class="wc-level-grid">
+            <button class="wc-level-btn active" data-level="beginner" onclick="selectWcLevel(this,'beginner')">
+              <span class="wc-level-emoji">🟢</span>
+              <span class="wc-level-name">초급</span>
+              <span class="wc-level-desc">기본 표현, 짧은 문장 중심</span>
+            </button>
+            <button class="wc-level-btn" data-level="intermediate" onclick="selectWcLevel(this,'intermediate')">
+              <span class="wc-level-emoji">🟡</span>
+              <span class="wc-level-name">중급</span>
+              <span class="wc-level-desc">다양한 어휘, 복문 활용</span>
+            </button>
+            <button class="wc-level-btn" data-level="advanced" onclick="selectWcLevel(this,'advanced')">
+              <span class="wc-level-emoji">🔴</span>
+              <span class="wc-level-name">고급</span>
+              <span class="wc-level-desc">풍부한 표현, 관용어 포함</span>
+            </button>
+          </div>
+
+          <button class="wc-start-btn wc-final-btn" onclick="startConversation()">
+            🎙️ 대화 시작하기
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════ 복습 패널 ════ -->
+    <section class="review-panel" id="reviewPanel" aria-label="복습">
+      <div class="rv-section">
+        <div class="rv-section-title">📊 세션 요약</div>
+        <div class="rv-summary-grid">
+          <div class="rv-stat-card"><div class="rv-stat-label">대화 횟수</div><div class="rv-stat-val blue" id="rv-turns">0</div></div>
+          <div class="rv-stat-card"><div class="rv-stat-label">발화 단어</div><div class="rv-stat-val blue" id="rv-words">0</div></div>
+          <div class="rv-stat-card">
+            <div class="rv-stat-label">유창성 점수</div>
+            <div class="rv-stat-val green" id="rv-fluency">—</div>
+            <div class="rv-gauge-wrap"><div class="rv-gauge-fill gauge-good" id="rv-fluency-bar" style="width:0%"></div></div>
+          </div>
+          <div class="rv-stat-card"><div class="rv-stat-label">주요 교정 유형</div><div class="rv-stat-val orange" id="rv-top-err" style="font-size:14px;margin-top:4px">—</div></div>
+        </div>
+        <div class="rv-type-list" id="rv-type-list"><div class="rv-empty">대화를 시작하면 교정 분석이 나타나요</div></div>
+      </div>
+
+      <div class="rv-section">
+        <div class="rv-section-title">✏️ 교정 노트 전체보기</div>
+        <div class="rv-corrections-list" id="rv-corrections-list"><div class="rv-empty">아직 교정 내용이 없어요.</div></div>
+      </div>
+
+      <div class="rv-section">
+        <div class="rv-section-title">💡 어휘 플래시카드</div>
+        <div class="rv-flashcard-area" id="rv-flashcard-wrap">
+          <div class="rv-flashcard" id="rv-flashcard" onclick="flipCard()" style="display:none">
+            <div class="rv-card-inner">
+              <div class="rv-card-face rv-card-front">
+                <div class="fc-front-word" id="fc-front-word"></div>
+                <div class="fc-front-hint">카드를 클릭하면 뜻이 나와요 👆</div>
+              </div>
+              <div class="rv-card-face rv-card-back">
+                <div class="fc-back-word"      id="fc-back-word"></div>
+                <div class="fc-back-meaning"   id="fc-back-meaning"></div>
+                <div class="fc-back-meaning-ko" id="fc-back-meaning-ko"></div>
+              </div>
+            </div>
+          </div>
+          <div class="rv-card-controls" id="rv-card-controls" style="display:none">
+            <button class="fc-nav-btn" id="fc-prev" onclick="prevCard()">◀</button>
+            <span class="rv-card-counter" id="rv-card-counter">1 / 1</span>
+            <button class="fc-nav-btn" id="fc-next" onclick="nextCard()">▶</button>
+            <button class="fc-shuffle-btn" onclick="shuffleCards()">🔀 섞기</button>
+          </div>
+          <div class="rv-empty" id="rv-vocab-empty">아직 저장된 어휘가 없어요.<br>대화하면서 새로운 단어가 쌓여요!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ 사이드바 ════ -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <p class="section-title">오늘의 학습</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-val stat-words" id="statWords">0</div><div class="stat-label">발화 단어 수</div></div>
+          <div class="stat-card"><div class="stat-val stat-corrections" id="statCorrections">0</div><div class="stat-label">교정 횟수</div></div>
+          <div class="stat-card"><div class="stat-val stat-streak" id="statTurns">0</div><div class="stat-label">대화 횟수</div></div>
+          <div class="stat-card"><div class="stat-val stat-score" id="statScore">—</div><div class="stat-label">유창성 점수</div></div>
+        </div>
+        <p class="section-title">스킬 현황</p>
+        <div class="progress-section">
+          <div class="progress-item">
+            <div class="progress-label"><span>문법</span><span id="prog-grammar">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill prog-grammar" id="bar-grammar" style="width:0%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>어휘</span><span id="prog-vocab">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill prog-vocab" id="bar-vocab" style="width:0%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>유창성</span><span id="prog-fluency">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill prog-fluency" id="bar-fluency" style="width:0%"></div></div>
+          </div>
+        </div>
+        <p class="section-title">📝 교정 노트</p>
+        <div class="error-log" id="errorLog"><div class="empty-state">교정 내용이 여기에 쌓여요</div></div>
+        <p class="section-title">💡 새로운 어휘</p>
+        <div class="vocab-list" id="vocabList"><div class="empty-state">새로 배운 단어가 여기에 저장돼요</div></div>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/voice.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/review.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/welcome3d.js"></script>
+</body>
+</html>

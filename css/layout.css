@@ -1,0 +1,116 @@
+/* ════════════════════════════════
+   layout.css — 전체 페이지 구조
+   ════════════════════════════════ */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ── 헤더 ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 60px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── 2단 레이아웃 ── */
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── 채팅 패널 ── */
+.chat-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── 사이드바 ── */
+.sidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.sidebar-inner {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+}
+
+.sidebar-inner::-webkit-scrollbar { width: 3px; }
+.sidebar-inner::-webkit-scrollbar-track { background: transparent; }
+.sidebar-inner::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* ── 복습 패널: 사이드바 없이 전체 너비 ── */
+.review-panel {
+  flex: 1;
+}
+
+/* ══════════════════════════════════════════
+   웰컴 상태 — 헤더/사이드바 숨김 & 진입 애니메이션
+   ══════════════════════════════════════════ */
+
+/* 웰컴 상태일 때 헤더/사이드바 완전히 숨김 */
+body[data-welcome="true"] .header  { display: none; }
+body[data-welcome="true"] .sidebar { display: none; }
+body[data-welcome="true"] .main    { height: 100vh; }
+
+/* ── 헤더 슬라이드인 ── */
+@keyframes headerSlideIn {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 사이드바 슬라이드인 ── */
+@keyframes sidebarSlideIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── 메인 패널 페이드인 ── */
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.header.anim-in  {
+  animation: headerSlideIn  0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.sidebar.anim-in {
+  animation: sidebarSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.voice-mode-panel.anim-in,
+.chat-panel.anim-in {
+  animation: panelFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}

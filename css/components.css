@@ -1,0 +1,534 @@
+/* ════════════════════════════════════════
+   components.css — 공통 UI 컴포넌트
+   ════════════════════════════════════════ */
+
+/* ── 로고 ── */
+.logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+/* 다크모드에서 로고 교체 */
+.logo .logo-light { display: block; }
+.logo .logo-dark  { display: none; }
+[data-theme="dark"] .logo .logo-light { display: none; }
+[data-theme="dark"] .logo .logo-dark  { display: block; }
+
+/* ── 다크모드 토글 버튼 ── */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.theme-toggle:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── 레벨 배지 ── */
+.level-badge {
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.level-badge:hover { border-color: var(--accent); color: var(--accent); }
+
+.level-badge.beginner     { color: #12B76A; border-color: #12B76A44; background: var(--correct-light); }
+.level-badge.intermediate { color: var(--warn); border-color: #F7900944; background: var(--warn-light); }
+.level-badge.advanced     { color: var(--error); border-color: #F0443844; background: var(--error-light); }
+
+/* ── 탭 네비게이션 ── */
+.tab-nav {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-sub);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  border: 1px solid var(--border);
+}
+
+.tab-btn {
+  padding: 6px 18px;
+  border-radius: 9px;
+  color: var(--text3);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition);
+  background: transparent;
+}
+.tab-btn.active {
+  background: var(--bg-card);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.tab-btn:not(.active):hover { color: var(--text2); }
+
+/* ── 토픽 바 ── */
+.topic-bar {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  flex-shrink: 0;
+  background: var(--bg);
+}
+.topic-label {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.topic-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.chip {
+  padding: 4px 13px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  transition: all var(--transition);
+  background: transparent;
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── 섹션 타이틀 ── */
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
+
+/* ── 통계 그리드 ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+.stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+.stat-words       { color: var(--accent); }
+.stat-corrections { color: var(--error); }
+.stat-streak      { color: var(--warn); }
+.stat-score       { color: var(--correct); }
+
+/* ── 스킬 진행 바 ── */
+.progress-section { margin-bottom: 24px; }
+.progress-item    { margin-bottom: 12px; }
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--bg-sub);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .8s ease;
+}
+.prog-grammar { background: var(--accent); }
+.prog-vocab   { background: var(--correct); }
+.prog-fluency { background: var(--warn); }
+
+/* ── 교정 로그 ── */
+.error-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.error-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--error);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 12px;
+}
+.error-type {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--error);
+  margin-bottom: 5px;
+}
+.error-original {
+  font-size: 12px;
+  color: var(--text3);
+  text-decoration: line-through;
+  margin-bottom: 3px;
+}
+.error-corrected { font-size: 13px; color: var(--correct); font-weight: 600; }
+.error-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--accent-light);
+  color: var(--accent-text);
+  margin-top: 5px;
+}
+
+/* ── 어휘 목록 ── */
+.vocab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.vocab-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.vocab-word    { font-size: 13px; font-weight: 600; color: var(--accent); }
+.vocab-meaning { font-size: 12px; color: var(--text2); margin-top: 1px; }
+
+.vocab-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--correct-light);
+  color: var(--correct);
+  white-space: nowrap;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ── 빈 상태 ── */
+.empty-state {
+  text-align: center;
+  color: var(--text3);
+  font-size: 13px;
+  padding: 20px 0;
+  line-height: 1.6;
+}
+
+/* ── 새 대화 버튼 ── */
+.new-chat-btn {
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.new-chat-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* ── 주제 직접 입력 ── */
+.chip-custom-trigger { border-style: dashed; }
+
+.custom-topic-input {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  width: 100%;           /* 두 번째 줄에서 전체 너비 */
+  flex-basis: 100%;      /* flex-wrap 환경에서 단독 줄 차지 */
+}
+.custom-topic-input.open { display: flex; }
+
+.custom-topic-input input {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font-body);
+  outline: none;
+}
+.custom-topic-input input::placeholder { color: var(--text3); }
+
+.custom-topic-input button {
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity var(--transition);
+}
+.custom-topic-input button:hover { opacity: .85; }
+
+/* ── 교정 타입 배지 (인라인) ── */
+.corr-type-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.corr-type-grammar    { background: #EBF0FF; color: #2347B5; }
+.corr-type-vocabulary { background: #FFF7ED; color: #C2410C; }
+.corr-type-phrasing   { background: #F0FDF4; color: #166534; }
+.corr-type-context    { background: #FEF9C3; color: #92400E; }
+
+[data-theme="dark"] .corr-type-grammar    { background: #1E2A4A; color: #93C5FD; }
+[data-theme="dark"] .corr-type-vocabulary { background: #431407; color: #FCA5A5; }
+[data-theme="dark"] .corr-type-phrasing   { background: #052E16; color: #86EFAC; }
+[data-theme="dark"] .corr-type-context    { background: #422006; color: #FCD34D; }
+
+/* ── 맥락 오류 강조 (사이드바) ── */
+.error-item-context { border-left-color: var(--warn); }
+
+/* ── 어휘 한국어 뜻 ── */
+.vocab-meaning-ko {
+  font-size: 11px;
+  color: var(--accent);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* ── 복습 탭 교정 유형 배지 컬러 ── */
+.rv-badge-grammar    { background: var(--accent-light); color: var(--accent-text); }
+.rv-badge-vocabulary { background: var(--warn-light);   color: var(--warn); }
+.rv-badge-phrasing   { background: var(--correct-light);color: var(--correct); }
+.rv-badge-context    { background: var(--warn-light);   color: #92400E; }
+
+/* ══════════════════════════════
+   주제 변경 팝업
+   ══════════════════════════════ */
+.topic-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn .15s ease;
+}
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+.topic-popup-inner {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 360px;
+  box-shadow: var(--shadow-md);
+}
+
+.topic-popup-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.topic-popup-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.topic-popup-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-sub);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--font-body);
+}
+.topic-popup-btn:hover { border-color: var(--accent); background: var(--accent-light); }
+.topic-popup-soft:hover { border-color: var(--accent); }
+.topic-popup-hard:hover { border-color: var(--correct); }
+
+.topic-popup-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text3);
+}
+
+.topic-popup-cancel {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text3);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  transition: color var(--transition);
+}
+.topic-popup-cancel:hover { color: var(--text); }
+
+/* ── 주제 변경 알림 말풍선 ── */
+.topic-change-notice {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0;
+}
+.topic-change-notice span {
+  font-size: 12px;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  padding: 4px 16px;
+  opacity: .9;
+}
+
+/* ══════════════════════════════
+   새 대화 주제/레벨 선택 팝업
+   ══════════════════════════════ */
+.ns-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  animation: fadeIn .15s ease;
+}
+
+.ns-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  width: 400px; max-width: calc(100vw - 32px);
+  box-shadow: var(--shadow-md);
+}
+
+.ns-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.ns-desc  { font-size: 13px; color: var(--text2); margin-bottom: 18px; }
+.ns-section-label {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--text3); margin-bottom: 8px;
+}
+
+.ns-topic-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+}
+.ns-topic-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 6px;
+  background: var(--bg-sub);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer; transition: all var(--transition);
+  font-size: 12px; font-weight: 600; color: var(--text2);
+  font-family: var(--font-body);
+}
+.ns-topic-btn span:first-child { font-size: 20px; }
+.ns-topic-btn:hover  { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.ns-topic-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent-text); }
+
+.ns-level-row { display: flex; gap: 8px; }
+.ns-level-btn {
+  flex: 1; padding: 8px 4px;
+  background: var(--bg-sub);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 600; color: var(--text2);
+  cursor: pointer; transition: all var(--transition);
+  font-family: var(--font-body);
+}
+.ns-level-btn:hover  { border-color: var(--accent); color: var(--accent); }
+.ns-level-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent-text); }
+
+.ns-btns {
+  display: flex; gap: 10px; justify-content: flex-end;
+  margin-top: 20px;
+}
+.ns-cancel {
+  padding: 9px 18px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border); background: transparent;
+  font-size: 13px; color: var(--text2); cursor: pointer;
+  font-family: var(--font-body); transition: all var(--transition);
+}
+.ns-cancel:hover { color: var(--text); border-color: var(--border-md); }
+.ns-confirm {
+  padding: 9px 22px; border-radius: var(--radius-pill);
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 600; border: none;
+  cursor: pointer; font-family: var(--font-body);
+  transition: all var(--transition);
+}
+.ns-confirm:hover { background: var(--accent-dark); transform: translateY(-1px); }
