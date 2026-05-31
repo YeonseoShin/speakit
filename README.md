@@ -1,11 +1,11 @@
-#  Speakit — AI 영어 회화 튜터
+#  Speakit - AI 영어 회화 튜터
 
 Anthropic Claude API를 활용한 브라우저 기반 영어 회화 튜터예요.  
 레벨에 맞춰 대화하고, 문법 실수를 실시간으로 교정해 드려요.
 
 ---
 
-##  시작하기 (순서대로 따라해 주세요!)
+##  시작하기 
 
 ### 1단계 — 다운로드 & 이동
 
@@ -14,13 +14,13 @@ Anthropic Claude API를 활용한 브라우저 기반 영어 회화 튜터예요
 cd speakit-v3
 ```
 
-### 2단계 — 패키지 설치 반드시 먼저 실행!
+### 2단계 — 패키지 설치 반드시 먼저 실행
 
 ```bash
 npm install
 ```
 
-> `Cannot find package 'dotenv'` 오류가 뜨면 이 단계를 빠뜨린 거예요!
+> `Cannot find package 'dotenv'` 오류가 뜨면 이 단계를 빠뜨린 거예요
 
 ### 3단계 — API 키 설정
 
